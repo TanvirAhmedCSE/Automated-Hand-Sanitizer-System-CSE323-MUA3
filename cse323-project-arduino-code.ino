@@ -12,7 +12,9 @@ int cm;
 bool objectClose = false;
 
 void setup() {
+  // Starts serial communication for debugging at 9600 baud rate
   Serial.begin(9600);
+  // Configures ultrasonic sensor pins: trigger = output, echo = input.
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
@@ -24,14 +26,14 @@ void setup() {
 }
 
 void loop() {
-  // Trigger the ultrasonic sensor
+  // Trigger the ultrasonic sensor, sends a short pulse to start ultrasonic measurement.
   digitalWrite(trigPin, LOW);
   delayMicroseconds(5);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  // Read the echo (with timeout)
+  // Measures how long the pulse took to return
   duration = pulseIn(echoPin, HIGH, 20000); // timeout after 20 ms (~3.4 m range)
 
   // If no echo received
