@@ -70,15 +70,26 @@ void loop() {
   Serial.print(cm);
   Serial.println(" cm");
 
-  // Control the servos based on distance
+    // Control the servos based on distance
   if (cm <= 15 && !objectClose) {
     // Object just came close
-    sl.write(120);        // Move 180 degree servo ~120 degree
-    cr.write(0);          // Make the 360 degree servo spin clockwise (CW)
-    delay(500);           // then, ~120° rotation approximate 
-    cr.write(90);         // then, stop 360 degree servo's spinning
+    
+    for (int i = 0; i < 2; i++) {   // Servos pump sanitizer 2 times for each time detection
+      sl.write(120);        // Move 180 degree servo ~120 degree
+      cr.write(0);          // Make the 360 degree servo spin clockwise (CW)
+      delay(500);           // then, ~120 degree rotation approximate 
+      cr.write(90);         // then, stop 360 degree servo's spinning
+      
+      sl.write(0);          // Reset 180 degree servo to return to inisial state
+      cr.write(180);        // Make the 360 degree servo spin counter-clockwise (CCW)
+      delay(140);           // then, back rotation to return initial state (approximate)
+      cr.write(90);         // then, stop 360 degree servo's spinning
+      
+      delay(300);           // Small pause between pumps
+    }
+
     objectClose = true;   // Mark that hand is detected within 15 cm
-  } 
+  }  
   else if (cm > 15 && objectClose) {
     // Object moved away, return servos to initial position
     sl.write(0);          // Reset 180 degree servo to return to inisial state
